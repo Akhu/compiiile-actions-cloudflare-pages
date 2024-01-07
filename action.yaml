@@ -1,42 +1,14 @@
-on: [push]
+# GitHub Action
+# https://help.github.com/en/actions/automating-your-workflow-with-github-actions/metadata-syntax-for-github-actions
 
-jobs:
-  publish:
-    runs-on: macos-latest # Very important to stick to macos to avoid "spawn E2BIG" error during build
-    permissions:
-      contents: read
-      deployments: write
-    name: Build & Publish Compiiile to Cloudflare Pages
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v4.0.1
-      - name: Setup <MySite>...
-        run: echo "Startup build and deploy for <MySite>..."
-      - name: Installing dependencies
-        run: npm install
-        # working-directory: subfolder/folder/ #If you need to build a specific subfolder
-      - name: Build Site
-        run: npm run build
-        # working-directory: subfolder/folder/ #If you need to build a specific subfolder
-      - name: Publish to Cloudflare Pages
-        uses: cloudflare/pages-action@v1.5.0
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }} 
-          accountId: ${{ secrets.ACCOUNT_ID }}
-          projectName: <my-cloudflare-project-name> # Replace this by you cloudflare project
-          directory: .compiiile/dist
-          # Optional: Enable this if you want to have GitHub Deployments triggered
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # Optional: Switch what branch you are publishing to.
-          # By default this will be the branch which triggered this workflow
-          branch: main
-          # Optional: Change the working directory
-          # workingDirectory: subfolder/folder/ #If you need to publish a specific subfolder
-          # Optional: Change the Wrangler version, allows you to point to a specific version or a tag such as `beta`
-          wranglerVersion: '3'
-          
-          # ----------------
-          # Now duplicate from L15 to L38 here if you need to deploy other subfolders to other pages
-          # ----------------
+name: Compiiile Cloudflare Pages
+description: Fast, easy publishing Compiiile sites to Cloudflare
+
+author: Akhu
+branding:
+  color: purple
+  icon: upload-cloud
+
+runs:
+  using: "composite"
+  main: main.yml
